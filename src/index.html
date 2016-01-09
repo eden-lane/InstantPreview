@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript">
+    var CLIENT_ID = '759755084920-c51okm6pqpqk426u5k3crhe4k7bch8g3.apps.googleusercontent.com';
+    var SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly',
+                'https://www.googleapis.com/auth/drive.install',
+                'https://www.googleapis.com/auth/drive.file',
+                'profile'];
+
+    function checkAuth() {
+        gapi.auth.authorize({
+            'client_id': CLIENT_ID,
+            'scope': SCOPES.join(' '),
+            'immediate': true
+        }, handleAuthResult);
+    }
+
+    function handleAuthResult(authResult) {
+        console.info(authResult)
+        var authorizeDiv = document.getElementById('authorize-div');
+        if (authResult && !authResult.error) {
+            loadDriveApi();
+        }
+    }
+
+    function handleAuthClick(event) {
+        gapi.auth.authorize({
+            client_id: CLIENT_ID, 
+            scope: SCOPES, 
+            immediate: false
+        }, handleAuthResult);
+        return false;
+    }
+
+    function loadDriveApi() {
+        gapi.client.load('drive', 'v2');
+    }   
+    </script>
+    <script src="https://apis.google.com/js/client.js?onload=checkAuth"></script>
+
+    <title>Instant Preview</title>
+</head>
+<body>
+    <button id="authorize-button" onclick="handleAuthClick(event)">
+        Authorize
+      </button>
+</body>
+</html>
