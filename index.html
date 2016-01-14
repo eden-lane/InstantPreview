@@ -1,80 +1,76 @@
 <!DOCTYPE html>
 <html>
 <head>
+
     <script type="text/javascript">
-    var CLIENT_ID_LOCAL = '759755084920-c51okm6pqpqk426u5k3crhe4k7bch8g3.apps.googleusercontent.com';
-    var CLIENT_ID_DEV = '759755084920-e9ct1r1gcrp10od5q4ab9uclcarmjt68.apps.googleusercontent.com'
-    var SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly',
-                'https://www.googleapis.com/auth/drive.install',
-                'https://www.googleapis.com/auth/drive.file',
-                'profile'];
-
-    function checkAuth() {
-        gapi.auth.authorize({
-            'client_id': CLIENT_ID_DEV,
-            'scope': SCOPES.join(' '),
-            'immediate': true
-        }, handleAuthResult);
-    }
-
-    function handleAuthResult(authResult) {
-        console.info(authResult)
-        var authorizeDiv = document.getElementById('authorize-div');
-        if (authResult && !authResult.error) {
-            loadDriveApi();
-        }
-    }
-
-    function handleAuthClick(event) {
-        gapi.auth.authorize({
-            client_id: CLIENT_ID_DEV, 
-            scope: SCOPES, 
-            immediate: false
-        }, handleAuthResult);
-        return false;
-    }
-
-    function loadDriveApi() {
-        gapi.client.load('drive', 'v2', openFile);
-    }   
-
-    function openFile () {
-        if (location.href.split('?').length < 2)
-            return;
-        var id = location.href.split('?')[1].split('=')[1];
-        var request = gapi.client.drive.files.get({
-            fileId: id
-        });
-        request.execute(function (response) {
-            var url = response.webContentLink.replace('download', 'open');
-            location.href = url;
-        })
-    }
-
-    function downloadFile(url, callback) {
-      if (url) {
-        var accessToken = gapi.auth.getToken().access_token;
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', url);
-        xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-        xhr.onload = function() {
-          callback(xhr.responseText);
-        };
-        xhr.onerror = function() {
-          callback(null);
-        };
-        xhr.send();
-      } else {
-        callback(null);
-      }
-    }
+    
     </script>
-    <script src="https://apis.google.com/js/client.js?onload=checkAuth"></script>
 
+    <style type="text/css">
+        body {
+            background: #FAFAE5;
+            font-family: sans-serif;
+            
+        }
+
+        #auth {
+            padding: 10px;
+            border-radius: 3px;
+            border: none;
+            font-size: 15px;
+            background: #8BC34A;
+            color: #fff;
+        }
+
+        #opening {
+            position: absolute;
+            top: 50%;
+            height: 20px;
+            margin-top: -10px;
+            left: 50%;
+            width: 200px;
+            margin-left: -100px;
+            display: none;
+        }
+
+        .about {
+            text-align: center;
+        }
+
+        .about__todo {
+            display: inline-block;
+        }
+    </style>
     <title>Instant Preview</title>
 </head>
 <body>
-    <button id="authorize-button" onclick="handleAuthClick(event)">Authorize</button>
-    <img id="image"/>
+
+    <div class="tutorial">
+        <div class="tutorial__part">
+
+        </div>
+        <div>
+
+        </div>
+    </div>
+    <div class="about">
+        <h1>Instant Preview</h1>
+        <p>
+        Open files without Google Drive Preview
+        </p>
+
+        <div>
+        <button id="auth" style="display: none;" onclick="handleAuthClick(event)">Authorize</button>
+        </div>
+        <p id="opening">
+        Opening file. Please wait...
+        </p>
+        <p id="howto" style="text-align: center; margin-top: 105px; display: none;">
+            <img class="display: inline-block;" src="image.png"/>
+        </p>
+    </div>
+    <script src="config.js"></script>
+    <script src="index.js"></script>
+    <script src="https://apis.google.com/js/client.js?onload=checkAuth"></script>
 </body>
 </html>
