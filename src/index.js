@@ -14,6 +14,7 @@ function handleAuthResult(authResult) {
         authBtn.style.display = 'none';
     } else {
         authBtn.style.display = 'inline';
+        document.getElementById('howto').style.display = 'block';
     }
 }
 
