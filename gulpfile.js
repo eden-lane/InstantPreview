@@ -22,7 +22,7 @@ gulp.task('dev', ['config:dev'], function () {
         }))
 })
 
-gulp.task('deploy', function () {
+gulp.task('deploy', ['config:prod'], function () {
     return gulp.src('./src/**/*')
         .pipe(ghPages());       
 })
